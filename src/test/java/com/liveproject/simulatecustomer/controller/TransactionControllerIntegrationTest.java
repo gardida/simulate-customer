@@ -21,13 +21,13 @@ class TransactionControllerIntegrationTest {
     private TransactionService transactionService;
 
     @InjectMocks
-    private TransactionController transactionController = new TransactionController();
+    private TransactionController transactionController = new TransactionController(transactionService);
 
     @BeforeEach
     void setMockOutput() {
         List<Transaction> transactionList = List.of(
-                new Transaction("Debit", "123", Currency.getInstance("GBP"), BigDecimal.TEN, "David 1", "David1.jpg"),
-                new Transaction("Debit", "456", Currency.getInstance("USD"), BigDecimal.ONE, "David 2", "David2.jpg"));
+                new Transaction("Debit", "123", "GBP", BigDecimal.TEN, "David 1", "David1.jpg"),
+                new Transaction("Debit", "456", "USD", BigDecimal.ONE, "David 2", "David2.jpg"));
         when(transactionService.findAllByAccountNumber("123")).thenReturn(transactionList);
     }
 

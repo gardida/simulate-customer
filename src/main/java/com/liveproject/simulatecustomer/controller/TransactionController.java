@@ -16,12 +16,16 @@ import java.util.List;
 @Slf4j
 public class TransactionController {
 
-    @Autowired
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
 
-    @RequestMapping(path="/{accountNumber}", produces = "application/json")
+    public TransactionController(final TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    @GetMapping(path="/{accountNumber}", produces = "application/json")
     public List<Transaction> findTransactionsByAccountNumber(@PathVariable("accountNumber") String accountNumber) {
         log.info("Query for " + accountNumber);
+        System.out.println(transactionService);
         return transactionService.findAllByAccountNumber(accountNumber);
     }
 

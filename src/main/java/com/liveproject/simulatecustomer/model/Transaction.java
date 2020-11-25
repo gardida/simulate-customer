@@ -12,7 +12,7 @@ import java.util.Currency;
 public class Transaction {
     private String type;
     private String accountNumber;
-    private Currency currency;
+    private String currency;
     private BigDecimal amount;
     private String merchantName;
     private String merchantLogo;

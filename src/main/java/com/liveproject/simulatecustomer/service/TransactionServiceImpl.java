@@ -1,20 +1,26 @@
 package com.liveproject.simulatecustomer.service;
 
 import com.liveproject.simulatecustomer.model.Transaction;
+import com.liveproject.simulatecustomer.repository.MerchantDetailsRepository;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
+    private final MerchantDetailsRepository merchantDetailsRepository;
+    private final RestTransactionApiClient restTransactionApiClient;
+
+    public TransactionServiceImpl(RestTransactionApiClient restTransactionApiClient, MerchantDetailsRepository merchantDetailsRepository) {
+        this.restTransactionApiClient = restTransactionApiClient;
+        this.merchantDetailsRepository = merchantDetailsRepository;
+    }
+
     public List<Transaction> findAllByAccountNumber(String accountNumber) {
-        return List.of(
-                new Transaction("Debit", "123", Currency.getInstance("GBP"), BigDecimal.TEN, "David 1", "David1.jpg"),
-                new Transaction("Debit", "456", Currency.getInstance("USD"), BigDecimal.ONE, "David 2", "David2.jpg"));
+        final List<Transaction> accountTransactionList = restTransactionApiClient.getTransactionByAccountNumber(accountNumber);
+        accountTransactionList.forEach(merchantDetailsRepository::addMerchantLogo);
+        return accountTransactionList;
     }
 
 }
